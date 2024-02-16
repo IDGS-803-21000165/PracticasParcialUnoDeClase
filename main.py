@@ -1,7 +1,9 @@
 from flask import Flask, render_template, request
 import FormulaDistancia as fm
 import Resistencias as rs
+import Diccionario as dic
 from math import sqrt
+from io import open
 
 app = Flask(__name__)
 
@@ -85,6 +87,59 @@ def alumnos():
         result = raiz
 
     return render_template("formularioDistancia.html", form=dist_form, rest=result)
+
+
+@app.route("/diccionario", methods=["GET", "POST"])
+def diccionario():
+    dicc_form = dic.Diccionario(request.form)
+    trad_form = dic.Traductor(request.form)
+    diccIng = {}
+    palIng = ''
+    palEsp = ''
+    palBus = ''
+    palRes = ''
+    opI = ''
+    menSucc = ''
+    menWar = ''
+    if request.method == 'POST':
+        menSucc = ''
+        menWar = ''
+        if 'guardar' in request.form:
+            if dicc_form.validate():
+                palIng = dicc_form.inglesTxt.data
+                palEsp = dicc_form.espaniolTxt.data
+
+                with open('Diccionario.txt', 'a', encoding='utf-8') as diccionarioFile:
+                    diccionarioFile.write(f'\n{palIng}, {palEsp}')
+                    menSucc = 'Palabra Guardada'
+
+        elif trad_form.validate():
+            palBus = trad_form.palabraBus.data
+            opI = trad_form.idiomaOpcion.data
+
+            if opI == 'Es':
+                with open('Diccionario.txt', 'r', encoding='utf-8') as diccionarioFile:
+                    for linea in diccionarioFile:
+                        partes = linea.split(',')
+                        if len(partes) == 2:
+                            clave = partes[0].strip().upper()
+                            valor = partes[1].strip().upper()
+                            diccIng[clave] = valor
+
+            elif opI == 'En':
+                with open('Diccionario.txt', 'r', encoding='utf-8') as diccionarioFile:
+                    for linea in diccionarioFile:
+                        partes = linea.split(',')
+                        if len(partes) == 2:
+                            clave = partes[1].strip().upper()
+                            valor = partes[0].strip().upper()
+                            diccIng[clave] = valor
+
+        if palBus.upper() in diccIng:
+            palRes = diccIng[palBus.upper()]
+        else:
+            menWar = 'Palabra No Encontrada'
+    return render_template("diccionario.html", form=dicc_form, form_trad=trad_form, palRes=palRes, menSucc=menSucc, menWar=menWar)
 
 
 @app.route("/resistencias", methods=["GET", "POST"])

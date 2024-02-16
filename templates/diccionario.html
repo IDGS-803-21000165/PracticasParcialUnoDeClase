@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario Resistencia</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container">
+        {%block content%}
+        {%import "_macros.html" as macros%}
+        <h1>Diccionario Ingles - Español</h1>
+        <div class="container">
+            <main class="row">
+                <div class="col-md-3">
+                    <form action="" method="POST" novalidate>
+                        {{macros.render_field(form.inglesTxt, class="form-control")}}
+                </div>
+                <div class="col-md-3">
+                    {{macros.render_field(form.espaniolTxt, class="form-control")}}
+                </div>
+                <div class="col-md-12 mt-3">
+                    <input type="submit" name="guardar" value="Guardar" class="btn btn-primary">
+                </div>
+                <div class="alert alert-success" role="alert">
+                    {{menSucc}}
+                </div>
+                <hr style="margin: 5px; padding: 5px;">
+                </form>
+            </main>
+
+            <main class="row"> <!-- Abre un nuevo main para el segundo formulario -->
+                <div class="col-md-3">
+                    <form action="" method="POST" novalidate>
+                        {{macros.render_field(form_trad.idiomaOpcion, class="form-group")}}
+                </div>
+                <div class="col-md-3">
+                    {{macros.render_field(form_trad.palabraBus, class="form-control")}}
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="espaniol">Palabra en Español</label>
+                    <input type="text" class="form-control" readonly name="espaniol" id="espaniol" value="{{palRes}}">
+                </div>
+                <div class="col-md-12 mt-3">
+                    <input type="submit" name="traducir" value="Traducir" class="btn btn-primary">
+                </div>
+                <div class="alert alert-warning" role="alert">
+                    {{menWar}}
+                </div>
+                </form>
+            </main>
+        </div>
+        {%endblock%}
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
